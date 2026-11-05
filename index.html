@@ -1,12 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PAC-MAN — 허들링 아케이드</title>
+<style>
+:root{color-scheme:dark;--bg:#101113;--ink:#f5f2df;--muted:#a7a797;--yellow:#ffe347;--blue:#4058e8}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,'Apple SD Gothic Neo',sans-serif}button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid var(--yellow);outline-offset:5px}::selection{background:var(--yellow);color:#101113}main{max-width:1050px;margin:auto;padding:32px 28px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #353630;padding-bottom:20px}header a{color:var(--ink);font-size:14px;text-decoration:none;font-weight:bold;letter-spacing:2px}.sound{background:none;border:1px solid #55564a;color:var(--ink);padding:10px 15px;border-radius:6px}.layout{display:grid;grid-template-columns:1fr 460px;gap:70px;align-items:center;margin-top:36px}h1{font-size:clamp(48px,7vw,80px);line-height:.92;letter-spacing:-.04em;margin:0 0 26px;color:var(--yellow);font-weight:900}.intro{font-size:17px;line-height:1.8;color:#bdbdaf;max-width:300px}.legend{margin:36px 0;display:grid;gap:16px;font-size:14px}.legend div{display:flex;align-items:center;gap:14px}.dot{width:7px;height:7px;border-radius:50%;background:#f7ddaf;margin:0 5px}.power{width:17px;height:17px;border-radius:50%;background:var(--yellow)}.legend span:last-child{margin-left:auto;color:var(--muted);font-size:12px}.hint{border-top:1px solid #353630;padding-top:20px;font-size:13px;line-height:2;color:var(--muted)}kbd{color:var(--ink);font:12px monospace;border:1px solid #55564a;border-radius:4px;padding:3px 6px}.scoreboard{display:flex;justify-content:space-between;margin-bottom:18px}.scoreboard small{font-size:10px;letter-spacing:1.7px;color:var(--muted);display:block;margin-bottom:6px}.scoreboard strong{font:24px monospace;font-variant-numeric:tabular-nums}.scoreboard .best{text-align:right}.board{position:relative;background:#080a13;border:1px solid #303747;padding:10px;border-radius:12px}canvas{width:100%;height:auto;display:block;touch-action:none}.overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:#080a13d9;border-radius:12px}.overlay[hidden]{display:none}.overlay h2{font-size:30px;margin:0 0 12px;color:var(--yellow)}.overlay p{font-size:14px;color:#d2d1c1;line-height:1.7;margin:0 0 24px}.primary{background:var(--yellow);border:0;border-radius:6px;padding:14px 32px;color:#14150e;font-weight:800}.primary:hover{background:#fff090}.status{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-top:16px}.status button{background:none;border:0;color:var(--ink);padding:8px}.status button:hover,.sound:hover{color:var(--yellow)}#lives{color:var(--yellow);font-size:16px;letter-spacing:4px}.controls{display:grid;grid-template-columns:repeat(3,50px);gap:6px;justify-content:center;margin-top:20px}.controls button{height:44px;border:1px solid #44463c;background:#20221e;border-radius:6px;color:var(--ink);font-size:22px;touch-action:manipulation}.controls button:active{background:#55533a}.controls button:first-child{grid-column:2}.controls button:nth-child(2){grid-column:1}footer{margin-top:34px;border-top:1px solid #353630;padding-top:18px;display:flex;justify-content:space-between;font-size:11px;color:var(--muted);letter-spacing:1px}@media(min-width:800px){.controls{display:none}}@media(max-width:799px){main{max-width:510px;padding:20px}.layout{grid-template-columns:1fr;gap:24px;margin-top:28px}h1{font-size:48px;margin-bottom:12px}.intro{max-width:none;font-size:14px;margin:0}.legend,.hint{display:none}.scoreboard strong{font-size:22px}header{padding-bottom:16px}footer{margin-top:24px}.board{padding:7px}}
+</style>
 </head>
 <body>
-    안녕하세요
-    테스트 html 입니다.
-</body>
-</html>
+<main>
+<header><a href="./">HUDDLING / ARCADE</a><button class="sound" id="sound" aria-pressed="false">사운드 OFF</button></header>
+<div class="layout"><section><h1>PAC-MAN</h1><p class="intro">한 입씩, 미로 끝까지.<br>유령을 피해 모든 점을 먹어보세요.</p><div class="legend"><div><i class="dot"></i>작은 점<span>10 POINTS</span></div><div><i class="power"></i>파워 먹이<span>50 POINTS</span></div><div><svg width="18" height="20" viewBox="0 0 18 20" aria-hidden="true"><path fill="#f88caa" d="M0 20V9a9 9 0 0 1 18 0v11l-3-3-3 3-3-3-3 3-3-3Z"/><circle cx="6" cy="8" r="2" fill="white"/><circle cx="12" cy="8" r="2" fill="white"/></svg>파워 상태에서 유령 먹기<span>200 POINTS</span></div></div><p class="hint"><kbd>↑</kbd> <kbd>←</kbd> <kbd>↓</kbd> <kbd>→</kbd> 또는 <kbd>W A S D</kbd> 이동<br><kbd>Space</kbd> 시작 / 일시정지<br>큰 먹이를 먹으면 7초 동안 반격할 수 있어요.</p></section>
+<section aria-label="팩맨 게임"><div class="scoreboard"><div><small>SCORE</small><strong id="score">00000</strong></div><div><small>LEVEL</small><strong id="level">01</strong></div><div class="best"><small>BEST</small><strong id="best">00000</strong></div></div><div class="board"><canvas id="game" width="420" height="460" aria-label="팩맨 미로. 방향키 또는 아래 이동 버튼으로 조작하세요."></canvas><div class="overlay" id="overlay"><h2 id="title">READY!</h2><p id="message">모든 점을 먹으면 다음 레벨로.<br>준비되셨나요?</p><button class="primary" id="start">게임 시작</button></div></div><div class="status"><span id="lives" aria-label="남은 목숨 3">● ● ●</span><span id="state" role="status">최고 기록에 도전하세요</span><div><button id="pause" aria-label="일시정지">일시정지</button><button id="restart">다시 시작</button></div></div><div class="controls" aria-label="이동"><button data-dir="up" aria-label="위">↑</button><button data-dir="left" aria-label="왼쪽">←</button><button data-dir="down" aria-label="아래">↓</button><button data-dir="right" aria-label="오른쪽">→</button></div></section></div>
+<footer><span>작은 휴식, 한 판의 즐거움.</span><span>HTML ARCADE · 2026</span></footer></main>
+<script>
+'use strict';
+const map=[
+'#####################',
+'#o........#........o#',
+'#.###.###.#.###.###.#',
+'#...................#',
+'#.###.#.#####.#.###.#',
+'#.....#...#...#.....#',
+'#####.###.#.###.#####',
+'#####.#.......#.#####',
+'#####.#.##.##.#.#####',
+'#.......#   #.......#',
+'#.###.#.#   #.#.###.#',
+'#.....#.......#.....#',
+'#.###.#.#####.#.###.#',
+'#...#...........#...#',
+'###.#.###.#.###.#.###',
+'#.....#...#...#.....#',
+'#.#####.#####.#####.#',
+'#...................#',
+'#.###.#.#####.#.###.#',
+'#o..#.#... ...#.#..o#',
+'###.#.###.#.###.#.###',
+'#...................#',
+'#####################'];
+const $=id=>document.getElementById(id),canvas=$('game'),ctx=canvas.getContext('2d'),T=20;
+const directions={up:{x:0,y:-1},left:{x:-1,y:0},down:{x:0,y:1},right:{x:1,y:0}};
+let grid,player,ghosts,score=0,lives=3,level=1,best=0,power=0,mode='ready',acc=0,last=0,tick=0,sound=false,audio;
+try{best=Number(localStorage.getItem('huddling-pacman-best'))||0}catch{}
+function beep(freq=450){if(!sound)return;try{audio??=new (window.AudioContext||window.webkitAudioContext)();audio.resume();const o=audio.createOscillator(),g=audio.createGain();o.type='square';o.frequency.value=freq;g.gain.setValueAtTime(.025,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+.07);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+.08)}catch{}}
+function positions(){player={x:10,y:19,dir:'left',next:'left'};ghosts=[{x:9,y:9,color:'#ff737b'},{x:11,y:9,color:'#f398c2'},{x:9,y:10,color:'#65dcd2'},{x:11,y:10,color:'#ffb65e'}];power=0;acc=0}
+function board(){grid=map.map(r=>r.split(''));positions()}
+function update(){ $('score').textContent=String(score).padStart(5,'0');$('best').textContent=String(best).padStart(5,'0');$('level').textContent=String(level).padStart(2,'0');$('lives').textContent=Array(lives).fill('●').join(' ');$('lives').setAttribute('aria-label',`남은 목숨 ${lives}`)}
+function add(n){score+=n;if(score>best){best=score;try{localStorage.setItem('huddling-pacman-best',best)}catch{}}update()}
+function overlay(title,message,button){$('title').textContent=title;$('message').textContent=message;$('start').textContent=button;$('overlay').hidden=false}
+function start(){document.activeElement?.blur();if(mode==='ready'||mode==='over'){score=0;lives=3;level=1;board()}if(mode==='next'){level++;board()}mode='playing';$('overlay').hidden=true;$('pause').textContent='일시정지';last=performance.now();acc=0;update()}
+function pause(){if(mode==='playing'){mode='paused';overlay('PAUSED','잠깐 쉬어가도 괜찮아요.','계속하기');$('pause').textContent='계속하기'}else if(mode==='paused')start()}
+function open(x,y){return grid[y]?.[x]!==undefined&&grid[y][x]!=='#'}
+function move(a,d){const v=directions[d];if(open(a.x+v.x,a.y+v.y)){a.x+=v.x;a.y+=v.y;return true}return false}
+function collide(){for(const g of ghosts){if(g.x!==player.x||g.y!==player.y)continue;if(power>0){add(200);g.x=10;g.y=9;g.wait=12;beep(800)}else{lives--;update();positions();if(!lives){mode='over';overlay('GAME OVER',`최종 점수 ${score.toLocaleString()}점. 한 판 더 도전할까요?`,'다시 도전')}else{mode='life';overlay('한 번 더!',`남은 목숨 ${lives}개. 이번엔 유령을 피해보세요.`,'계속하기')}return true}}return false}
+function step(){tick++;power=Math.max(0,power-1);const v=directions[player.next];if(open(player.x+v.x,player.y+v.y))player.dir=player.next;move(player,player.dir);const cell=grid[player.y][player.x];if(cell==='.'||cell==='o'){grid[player.y][player.x]=' ';add(cell==='o'?50:10);if(cell==='o')power=Math.ceil(7000/interval());beep(cell==='o'?650:320)}if(collide())return;if(!grid.some(r=>r.some(c=>c==='.'||c==='o'))){mode='next';overlay('CLEAR!',`${level}레벨 완료! 다음 미로는 조금 더 빨라집니다.`,'다음 레벨');return}
+if(tick% (power?3:5)!==0){ghosts.forEach((g,i)=>{if(g.wait>0){g.wait--;return}let opts=Object.keys(directions).filter(d=>{const v=directions[d];return open(g.x+v.x,g.y+v.y)});if(opts.length>1&&g.dir)opts=opts.filter(d=>directions[d].x!==-directions[g.dir].x||directions[d].y!==-directions[g.dir].y);const target=i===1?{x:player.x+directions[player.dir].x*3,y:player.y+directions[player.dir].y*3}:player;opts.sort((a,b)=>{const dist=d=>Math.abs(g.x+directions[d].x-target.x)+Math.abs(g.y+directions[d].y-target.y);return (dist(a)-dist(b))*(power?-1:1)});const d=Math.random()<.22?opts[Math.floor(Math.random()*opts.length)]:opts[0];if(d){move(g,d);g.dir=d}})}collide();$('state').textContent=power?`파워 타임 · ${Math.ceil(power*interval()/1000)}초`:'모든 점을 먹어보세요'}
+function interval(){return Math.max(85,155-(level-1)*12)}
+function draw(now){ctx.fillStyle='#080a13';ctx.fillRect(0,0,420,460);for(let y=0;y<23;y++)for(let x=0;x<21;x++){const c=grid[y][x];if(c==='#'){ctx.fillStyle='#131c4c';ctx.strokeStyle='#4058d8';ctx.lineWidth=1.2;ctx.beginPath();ctx.roundRect(x*T+2,y*T+2,16,16,4);ctx.fill();ctx.stroke()}else if(c==='.'||c==='o'){ctx.fillStyle=c==='o'?'#ffe347':'#f3d5aa';ctx.beginPath();ctx.arc(x*T+10,y*T+10,c==='o'?5+Math.sin(now/180)*.7:2,0,Math.PI*2);ctx.fill()}}
+const angle={right:0,down:Math.PI/2,left:Math.PI,up:-Math.PI/2}[player.dir],mouth=mode==='playing'?.15+Math.abs(Math.sin(now/80))*.65:.3;ctx.fillStyle='#ffe347';ctx.beginPath();ctx.moveTo(player.x*T+10,player.y*T+10);ctx.arc(player.x*T+10,player.y*T+10,8.5,angle+mouth,angle+Math.PI*2-mouth);ctx.closePath();ctx.fill();ghosts.forEach(g=>{const x=g.x*T+2,y=g.y*T+2;ctx.fillStyle=power?(power<12&&tick%2?'#eeeddf':'#596aff'):g.color;ctx.beginPath();ctx.moveTo(x,y+16);ctx.lineTo(x,y+8);ctx.arc(x+8,y+8,8,Math.PI,0);ctx.lineTo(x+16,y+16);for(let i=4;i>=0;i--)ctx.lineTo(x+i*4,y+16-(i%2?3:0));ctx.fill();ctx.fillStyle='white';ctx.beginPath();ctx.ellipse(x+5,y+7,3,4,0,0,7);ctx.ellipse(x+11,y+7,3,4,0,0,7);ctx.fill();ctx.fillStyle='#13224d';ctx.beginPath();ctx.arc(x+5,y+8,1.5,0,7);ctx.arc(x+11,y+8,1.5,0,7);ctx.fill()})}
+function frame(now){const dt=Math.min(now-last,250);last=now;if(mode==='playing'){acc+=dt;while(acc>=interval()&&mode==='playing'){acc-=interval();step()}}draw(now);requestAnimationFrame(frame)}
+function steer(d){player.next=d}
+$('start').onclick=start;$('pause').onclick=pause;$('restart').onclick=()=>{mode='ready';start()};$('sound').onclick=()=>{sound=!sound;$('sound').textContent=`사운드 ${sound?'ON':'OFF'}`;$('sound').setAttribute('aria-pressed',sound);beep()};document.querySelectorAll('[data-dir]').forEach(b=>b.onpointerdown=e=>{e.preventDefault();steer(b.dataset.dir)});
+window.addEventListener('keydown',e=>{if(e.target.tagName==='BUTTON'&&(e.code==='Space'||e.code==='Enter'))return;const d={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',a:'left',s:'down',d:'right'}[e.key]||{W:'up',A:'left',S:'down',D:'right'}[e.key];if(d){e.preventDefault();steer(d)}if(e.code==='Space'){e.preventDefault();mode==='playing'||mode==='paused'?pause():start()}});
+let touch;canvas.addEventListener('pointerdown',e=>{touch={x:e.clientX,y:e.clientY}});canvas.addEventListener('pointerup',e=>{if(!touch)return;const dx=e.clientX-touch.x,dy=e.clientY-touch.y;if(Math.hypot(dx,dy)>10)steer(Math.abs(dx)>Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up');touch=null});document.addEventListener('visibilitychange',()=>{if(document.hidden&&mode==='playing')pause()});window.addEventListener('blur',()=>{if(mode==='playing')pause()});board();update();requestAnimationFrame(frame);
+</script></body></html>
